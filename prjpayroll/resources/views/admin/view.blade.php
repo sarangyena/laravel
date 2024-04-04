@@ -28,151 +28,209 @@
                             </div>
                             <input type="text" id="search"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Search branch name..." required />
+                                placeholder="Search Employee . . ." required />
                         </div>
                     </form>
                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-3">
-                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                            id="view">
-                            <thead
-                                class="text-xs text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3">
-                                        ID
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Edit
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        QR
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Role
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Username
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Name
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Status
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Email
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Phone No.
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Job
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        SSS
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        PhilHealth
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Pag-Ibig
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Rate
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Address
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        eName
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        ePhone
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        eAddress
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Created By
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($employees as $employee)
-                                    <tr data-id="{{ $employee->id }}"
-                                        class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            {{ $employee->id }}
+                        @if (session('delete'))
+                            <div class="flex items-center p-4 mb-4 mt-2 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800"
+                                role="alert">
+                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                                </svg>
+                                <span class="sr-only">Info</span>
+                                <div>
+                                    <span class="font-medium">{{ session('delete') }}</span>
+                                </div>
+                            </div>
+                        @elseif (session('error'))
+                            <div class="flex items-center p-4 mb-4 mt-2 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800"
+                                role="alert">
+                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                                </svg>
+                                <span class="sr-only">Info</span>
+                                <div>
+                                    <span class="font-medium">{{ session('error') }}</span>
+                                </div>
+                            </div>
+                        @endif
+                        @if ($employees->isEmpty())
+                            <div class="flex items-center p-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800"
+                                role="alert">
+                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                                </svg>
+                                <span class="sr-only">Info</span>
+                                <div>
+                                    <span class="font-medium">No Data to be Displayed.</span>
+                                </div>
+                            </div>
+                        @else
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                                id="view">
+                                <thead
+                                    class="text-xs text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            ID
                                         </th>
-                                        <td class="px-6 py-1">
-                                            @if ($employee->user->is(auth()->user()))
-                                            
-                                                <a href="{{route('a-employee.edit', $employee->id)}}" id="edit"
-                                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                                                    <img src="{{ asset('images/edit.png') }}">
-                                                </a>
-                                            @endif
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            <a href="#" id="qr"
-                                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                                                <img src="{{ asset('images/qr-code.png') }}">
-                                            </a>
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            {{ $employee->role }}
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            {{ $employee->userName }}
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            {{ $employee->last . ', ' . $employee->first . ' ' . $employee->middle }}
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            {{ $employee->status }}
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            {{ $employee->email }}
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            {{ $employee->phone }}
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            {{ $employee->job }}
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            {{ $employee->sss }}
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            {{ $employee->philhealth }}
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            {{ $employee->pagibig }}
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            {{ $employee->rate }}
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            {{ $employee->address }}
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            {{ $employee->eName }}
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            {{ $employee->ePhone }}
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            {{ $employee->eAdd }}
-                                        </td>
-                                        <td class="px-6 py-1">
-                                            {{ $employee->created_by }}
-                                        </td>
+                                        <th scope="col" class="px-6 py-3">
+                                            Edit
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Delete
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            QR
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Role
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Username
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Status
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Email
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Phone No.
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Job
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            SSS
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            PhilHealth
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Pag-Ibig
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Rate
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Address
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            eName
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            ePhone
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            eAddress
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Created By
+                                        </th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach ($employees as $employee)
+                                        <tr data-id="{{ $employee->id }}"
+                                            class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                            <th scope="row"
+                                                class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                {{ $employee->id }}
+                                            </th>
+                                            <td class="px-6 py-1">
+                                                @if ($employee->user->is(auth()->user()))
+                                                    <a href="{{ route('a-employee.edit', $employee->id) }}"
+                                                        id="edit"
+                                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                                        <img src="{{ asset('images/edit.png') }}">
+                                                    </a>
+                                                @endif
+                                            </td>
+                                            <td class="px-6 py-1">
+                                                @if ($employee->user->is(auth()->user()))
+                                                    <form method="POST" action="{{ route('a-employee.destroy', $employee->id) }}">
+                                                        @csrf
+                                                        @method('delete')
+                                                        <a href="{{ route('a-employee.destroy', $employee->id) }}"
+                                                            id="edit"
+                                                            class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                                            onclick="event.preventDefault(); this.closest('form').submit();">
+                                                            <img src="{{ asset('images/delete.png') }}" class="w-8 mx-auto">
+                                                        </a>
+                                                    </form>
+                                                @endif
+                                            </td>
+                                            <td class="px-6 py-1">
+                                                <a href="#" id="qr"
+                                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                                    <img src="{{ asset('images/qr-code.png') }}">
+                                                </a>
+                                            </td>
+                                            <td class="px-6 py-1">
+                                                {{ $employee->role }}
+                                            </td>
+                                            <td class="px-6 py-1">
+                                                {{ $employee->userName }}
+                                            </td>
+                                            <td class="px-6 py-1">
+                                                {{ $employee->last . ', ' . $employee->first . ' ' . $employee->middle }}
+                                            </td>
+                                            <td class="px-6 py-1">
+                                                {{ $employee->status }}
+                                            </td>
+                                            <td class="px-6 py-1">
+                                                {{ $employee->email }}
+                                            </td>
+                                            <td class="px-6 py-1">
+                                                {{ $employee->phone }}
+                                            </td>
+                                            <td class="px-6 py-1">
+                                                {{ $employee->job }}
+                                            </td>
+                                            <td class="px-6 py-1">
+                                                {{ $employee->sss }}
+                                            </td>
+                                            <td class="px-6 py-1">
+                                                {{ $employee->philhealth }}
+                                            </td>
+                                            <td class="px-6 py-1">
+                                                {{ $employee->pagibig }}
+                                            </td>
+                                            <td class="px-6 py-1">
+                                                {{ $employee->rate }}
+                                            </td>
+                                            <td class="px-6 py-1">
+                                                {{ $employee->address }}
+                                            </td>
+                                            <td class="px-6 py-1">
+                                                {{ $employee->eName }}
+                                            </td>
+                                            <td class="px-6 py-1">
+                                                {{ $employee->ePhone }}
+                                            </td>
+                                            <td class="px-6 py-1">
+                                                {{ $employee->eAdd }}
+                                            </td>
+                                            <td class="px-6 py-1">
+                                                {{ $employee->created_by }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @endif
                     </div>
-
                 </div>
             </div>
         </div>

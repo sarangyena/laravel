@@ -24,7 +24,7 @@ Route::get('/a-dashboard', function () {
 })->middleware(['auth'])->name('a-dashboard');
 
 Route::resource('a-employee', EmployeeController::class)
-    ->only(['index', 'store', 'edit', 'update'])
+    ->only(['index', 'store', 'edit', 'update', 'destroy'])
     ->middleware(['auth']);
 
 Route::get('/a-view', [EmployeeController::class,'view'])->name('a-view');

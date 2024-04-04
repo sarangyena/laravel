@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('payrolls', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('userId')->unique();
-            $table->foreign('userId')->references('id')->on('employees');
+            $table->foreignId('employee_id')->constrained()->cascadeOnDelete();
             $table->string('name')->nullable();
             $table->string('job')->nullable();
             $table->string('rate')->nullable();

@@ -33,9 +33,16 @@ class EmployeeController extends Controller
 
     public function view(): View
     {
-        return view('admin.view', [
-            'employees' => Employee::with('user')->first()->paginate(5),
-        ]);
+        $count = Employee::paginate(5);
+        if($count == null) {
+            return view('admin.view', [
+                'employees' => Employee::with('user')->first()->paginate(5),
+            ]);
+        }else{
+            return view('admin.view', [
+                'employees' => $count,
+            ]);
+        }
     }
 
     /**
@@ -78,6 +85,7 @@ class EmployeeController extends Controller
             $validated['password'] = Hash::make($request->last);
             $validated['created_by'] = $admin;
             $request->user()->employees()->create($validated);
+            $employee = Employee::latest()->first();
             //Get Image
             $userName = $request->userName;
             $fileName = $userName.'-'.time().'.'.$request->image->extension();
@@ -100,21 +108,32 @@ class EmployeeController extends Controller
             Storage::disk('public')->delete($imagePath);
 
             // Save Image And QR
-            $image = new Image();
+            $image = [];
+            $image['image_name'] = $fileName;
+            $image['image_data'] = $imageData;
+            $image['qr_data'] = $qrData;
+            $employee->image()->create($image);
+            /*$image = new Image();
             $image->userId = $id;
             $image->image_name = $fileName;
             $image->image_data = $imageData;
             $image->qr_data = $qrData;
-            $image->save();
+            $image->save();*/
 
             //Create Payroll
-            $payroll = new Payroll();
+            $payroll = [];
+            $payroll['name'] = $request->last.', '.$request->first.' '.$request->middle;
+            $payroll['job'] = $request->job;
+            $payroll['rate'] = $request->rate;
+            $payroll['rph'] = $request->rate/8+($request->rate/8)*0.2;
+            $employee->payroll()->create($payroll);
+            /*$payroll = new Payroll();
             $payroll->userId = $id;
             $payroll->name = $request->last.', '.$request->first.' '.$request->middle;
             $payroll->job = $request->job;
             $payroll->rate = $request->rate;
             $payroll->rph = $request->rate/8+($request->rate/8)*0.2;
-            $payroll->save();
+            $payroll->save();*/
 
             return redirect(route('a-employee.index'))->with('success', 'Successfully added employee.');
         }catch (\Exception $e) {
@@ -163,9 +182,18 @@ class EmployeeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Employee $employee)
+    public function destroy($id)
     {
-        //
+        try{
+            $employee = Employee::find($id);
+            $image = Image::find($id);
+            Gate::authorize('delete', $employee);
+            $employee->delete();
+            return redirect(route('a-view'))->with('delete', 'Successfully Deleted Employee.');;
+        }catch (\Exception $e) {
+            return redirect(route('a-view'))->with('error', $e->getMessage());
+        }
+        
     }
 
     public function getUserName(Request $request){

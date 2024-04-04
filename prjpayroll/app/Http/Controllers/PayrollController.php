@@ -14,10 +14,16 @@ class PayrollController extends Controller
      */
     public function index(): View
     {
-        // Retrieve all data from the table
-        $data = Payroll::paginate(6);
-        // Pass the data to the view
-        return view('admin.pay', ['data' => $data]);
+        $count = Payroll::paginate(5);
+        if($count == null) {
+            return view('admin.pay', [
+                'employees' => Payroll::with('user')->first()->paginate(5),
+            ]);
+        }else{
+            return view('admin.pay', [
+                'employees' => $count,
+            ]);
+        }
 
     }
 
