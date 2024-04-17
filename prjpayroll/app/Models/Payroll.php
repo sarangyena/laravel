@@ -12,13 +12,23 @@ class Payroll extends Model
 
     protected $fillable = [
         'name',
+        'employee_id',
+        'userName',
+        'week_id',
+        'week',
         'job',
         'rate',
         'rph',
+        'holiday',
+        'pagibig',
+        'philhealth',
+        'sss',
+        'advance',
+
     ]; 
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(Employee::class);    
+        return $this->belongsTo(User::class);    
     }
 }

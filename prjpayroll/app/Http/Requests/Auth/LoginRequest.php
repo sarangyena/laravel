@@ -40,6 +40,17 @@ class LoginRequest extends FormRequest
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
+        if (!Auth::guard('web')->attempt($this->only('userName', 'password'), $this->boolean('remember'))) {
+            if(!Auth::guard('employees')->attempt($this->only('userName', 'password'), $this->boolean('remember'))){
+                RateLimiter::hit($this->throttleKey());
+
+                throw ValidationException::withMessages([
+                    'userName' => trans('auth.failed'),
+                ]);
+            }
+        }
+        RateLimiter::clear($this->throttleKey());
+        /*$this->ensureIsNotRateLimited();
 
         if (! Auth::attempt($this->only('userName', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
@@ -49,7 +60,7 @@ class LoginRequest extends FormRequest
             ]);
         }
 
-        RateLimiter::clear($this->throttleKey());
+        RateLimiter::clear($this->throttleKey());*/
     }
 
     /**

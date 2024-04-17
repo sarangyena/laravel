@@ -1,9 +1,11 @@
 @php
     use App\Models\User;
     use App\Models\Employee;
+    use App\Models\Payroll;
 
-    $user = Employee::find(1);
-    dd($user->user->is(auth()->user()));
+    $emp = Employee::find(2);
+    $payroll = Payroll::find(2);
+    dd($emp->user->is(auth()->user()));
     /*$adminId = 1; // Assuming the ID of the admin you want to retrieve data for is 1
     $admin = Employee::find(1);
     dd($admin);

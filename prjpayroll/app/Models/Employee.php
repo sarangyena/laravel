@@ -31,6 +31,7 @@ class Employee extends Model
         'ePhone',
         'eAdd',
         'created_by',
+        'edited_by',
         'password',
     ];
 
@@ -46,5 +47,13 @@ class Employee extends Model
     public function payroll(): HasMany
     {
         return $this->hasMany(Payroll::class);    
+    }
+    public function login(): HasOne
+    {
+        return $this->hasOne(EmployeeAuth::class);    
+    }
+    public function qr(): HasMany
+    {
+        return $this->hasMany(QRLogin::class);    
     }
 }

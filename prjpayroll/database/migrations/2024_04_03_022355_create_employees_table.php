@@ -32,6 +32,7 @@ return new class extends Migration
             $table->string('ePhone')->nullable();
             $table->string('eAdd')->nullable();
             $table->string('created_by');
+            $table->string('edited_by')->nullable();
             $table->string('password');
             $table->timestamps();
         });

@@ -12,6 +12,6 @@ class EmployeeLayout extends Component
      */
     public function render(): View
     {
-        return view('admin.layouts.app');
+        return view('employee.layouts.app');
     }
 }

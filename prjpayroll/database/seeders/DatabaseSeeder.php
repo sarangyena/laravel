@@ -18,6 +18,17 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Test User',
             'userName' => 'sample1',
+            'userType' => 'user',
+        ]);
+        User::factory()->create([
+            'name' => 'Test User',
+            'userName' => 'sample2',
+            'userType' => 'admin',
+        ]);
+        User::factory()->create([
+            'name' => 'Test User',
+            'userName' => 'qr',
+            'userType' => 'QR',
         ]);
     }
 }
