@@ -90,6 +90,9 @@
                                             ID
                                         </th>
                                         <th scope="col" class="px-6 py-3">
+                                            Date Hired
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
                                             Edit
                                         </th>
                                         <th scope="col" class="px-6 py-3">
@@ -165,6 +168,9 @@
                                                 class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                 {{ $employee->id }}
                                             </th>
+                                            <td class="px-6 py-1">
+                                                {{$employee->hired}}
+                                            </td>
                                             
                                             <td class="px-6 py-1">
                                                 @if ($employee->user->is(auth()->user()))

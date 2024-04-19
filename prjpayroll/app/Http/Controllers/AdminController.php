@@ -22,8 +22,7 @@ use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\PngWriter;
-
-
+use Illuminate\Support\Facades\Date;
 
 class AdminController extends Controller
 {
@@ -149,6 +148,7 @@ class AdminController extends Controller
                 'ePhone' => 'nullable|string|uppercase|max:255',
                 'eAdd' => 'nullable|string|uppercase|max:255',
             ]);
+            $validated['hired'] = Date::now();
             $validated['password'] = Hash::make($request->last);
             $validated['created_by'] = $this->admin->name;
             $request->user()->employees()->create($validated);
@@ -187,6 +187,7 @@ class AdminController extends Controller
 
             //Create Payroll
             $payroll = [];
+            $payroll['hired'] = Date::now();
             $payroll['name'] = $request->last . ', ' . $request->first . ' ' . $request->middle;
             $payroll['userName'] = $userName;
             $payroll['week_id'] = $this->weekId;

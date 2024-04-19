@@ -87,6 +87,9 @@
                                             ID
                                         </th>
                                         <th scope="col" class="px-6 py-3">
+                                            Date Hired
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
                                             Print
                                         </th>
                                         <th scope="col" class="px-6 py-3">
@@ -151,8 +154,11 @@
                                                 {{ $pay->id }}
                                             </th>
                                             <td class="px-6 py-1">
+                                                {{$pay->hired}}
+                                            </td>
+                                            <td class="px-6 py-1">
                                                 @if ($pay->user->is(auth()->user()))
-                                                    <a href="{{route('p-print', $pay->id)}}"
+                                                    <a href="{{route('print', $pay->id)}}"
                                                         id="print"
                                                         class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                                                         <img src="{{ asset('images/printer.png') }}" class="w-7">

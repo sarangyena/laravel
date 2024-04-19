@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QR;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Spatie\LaravelPdf\Facades\Pdf;
 
 //Admin and User Dashboard
 Route::get('admin/dashboard', [AdminController::class,'index'])->middleware(['auth','admin'])->name('a-dash');
@@ -56,9 +57,9 @@ Route::middleware(['auth','QR'])->group(function () {
     Route::patch('qr/update', [QR::class,'update'])->name('qr-update');
 });
 //Print
-Route::get('print/{id}/', [PrintController::class,'print'])->name('p-print');
+Route::get('print/', [PrintController::class,'print'])->name('print');
 
-Route::get('print',[PrintController::class,'index'])->name('print');
+//Route::get('print',[PrintController::class,'index'])->name('print');
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

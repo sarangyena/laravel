@@ -14,6 +14,7 @@ class Employee extends Model
     use HasFactory;
     protected $fillable = [ 
         'role',
+        'hired',
         'userName',
         'last',
         'first',
@@ -47,10 +48,6 @@ class Employee extends Model
     public function payroll(): HasMany
     {
         return $this->hasMany(Payroll::class);    
-    }
-    public function login(): HasOne
-    {
-        return $this->hasOne(EmployeeAuth::class);    
     }
     public function qr(): HasMany
     {
