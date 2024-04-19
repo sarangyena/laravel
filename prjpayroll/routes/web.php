@@ -57,7 +57,7 @@ Route::middleware(['auth','QR'])->group(function () {
     Route::patch('qr/update', [QR::class,'update'])->name('qr-update');
 });
 //Print
-Route::get('print/', [PrintController::class,'print'])->name('print');
+Route::get('print/', [PrintController::class,'__invoke'])->name('print');
 
 //Route::get('print',[PrintController::class,'index'])->name('print');
 Route::middleware('auth')->group(function () {

@@ -70,7 +70,7 @@ return [
         ],
         'employees' => [
             'driver' => 'eloquent',
-            'model' => App\Models\EmployeeAuth::class,
+            'model' => App\Models\Employee::class,
         ],
 
         // 'users' => [

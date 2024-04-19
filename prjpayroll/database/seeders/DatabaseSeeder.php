@@ -18,12 +18,12 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Test User',
             'userName' => 'sample1',
-            'userType' => 'user',
+            'userType' => 'USER',
         ]);
         User::factory()->create([
             'name' => 'Test User',
             'userName' => 'sample2',
-            'userType' => 'admin',
+            'userType' => 'ADMIN',
         ]);
         User::factory()->create([
             'name' => 'Test User',

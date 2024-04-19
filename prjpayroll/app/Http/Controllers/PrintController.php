@@ -5,16 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Payroll;
 use Illuminate\Http\Request;
 //Print
-use function Spatie\LaravelPdf\Support\pdf;
-use Spatie\Browsershot\Browsershot;
-
+use Spatie\LaravelPdf\Facades\Pdf;
 class PrintController extends Controller
 {
-    public function print()
+    public function __invoke()
     {
-        return pdf('print.index', [
-            'invoiceNumber' => '1234',
-            'customerName' => 'Grumpy Cat',
-        ]);
+            Pdf::view('print.index', [
+                'invoiceNumber' => '1234',
+                'customerName' => 'Grumpy Cat',
+            ])
+            ->format('a4')
+            ->save('invoice.pdf');
     }
 }
