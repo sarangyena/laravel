@@ -18,7 +18,7 @@ class QR
     {
         $type = Auth::user()->userType;
         if($type != 'QR'){
-            if($type == 'admin'){
+            if($type == 'ADMIN'){
                 return redirect('admin/dashboard');
             }else{
                 return redirect('employee/dashboard');

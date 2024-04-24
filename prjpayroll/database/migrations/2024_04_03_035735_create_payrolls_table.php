@@ -13,23 +13,19 @@ return new class extends Migration
     {
         Schema::create('payrolls', function (Blueprint $table) {
             $table->id();
-            $table->string('hired');
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('employee_id')->references('id')->on('employees')->cascadeOnDelete();
-            $table->unsignedBigInteger('week_id');
-            $table->string('userName')->unique();
+            $table->foreignId('employee_id')->constrained()->cascadeOnDelete();
+            $table->string('week_id')->nullable();
             $table->string('week')->nullable();
-            $table->string('name');
-            $table->string('job');
-            $table->string('rate');
+            $table->string('name')->nullable();
+            $table->string('job')->nullable();
+            $table->string('rate')->nullable();
             $table->string('days')->nullable();
             $table->string('late')->nullable();
             $table->string('salary')->nullable();
-            $table->string('rph');
+            $table->string('rph')->nullable();
             $table->string('hrs')->nullable();
             $table->string('otpay')->nullable();
             $table->string('holiday')->nullable();
-            $table->string('pagibig')->nullable();
             $table->string('philhealth')->nullable();
             $table->string('sss')->nullable();
             $table->string('advance')->nullable();

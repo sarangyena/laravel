@@ -13,28 +13,21 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->string('role');
-            $table->string('hired');
-            $table->foreignId('user_id')->constrained();
-            $table->string('userName')->unique();
-            $table->string('last');
-            $table->string('first');
-            $table->string('middle')->nullable();
-            $table->string('status');
+            $table->string('userName')->unique()->nullable();
+            $table->string('name')->nullable();
+            $table->string('role')->nullable();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
-            $table->string('job');
+            $table->string('status')->nullable();
+            $table->string('job')->nullable();
             $table->string('sss')->nullable();
             $table->string('philhealth')->nullable();
-            $table->string('pagibig')->nullable();
-            $table->string('rate');
-            $table->string('address');
+            $table->string('address')->nullable();
             $table->string('eName')->nullable();
             $table->string('ePhone')->nullable();
             $table->string('eAdd')->nullable();
-            $table->string('created_by');
+            $table->string('created_by')->nullable();
             $table->string('edited_by')->nullable();
-            $table->string('password');
             $table->timestamps();
         });
     }

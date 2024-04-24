@@ -18,8 +18,6 @@ return new class extends Migration
             $table->string('role');
             $table->string('job');
             $table->string('name');
-            $table->string('ip');
-            $table->string('geo');
             $table->timestamps();
         });
     }

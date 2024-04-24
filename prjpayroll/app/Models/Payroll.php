@@ -11,21 +11,24 @@ class Payroll extends Model
     use HasFactory;
 
     protected $fillable = [
-        'hired',
+        'userName',
         'name',
         'employee_id',
-        'userName',
         'week_id',
         'week',
         'job',
         'rate',
+        'days',
+        'late',
+        'salary',
         'rph',
+        'hrs',
+        'otpay',
         'holiday',
-        'pagibig',
         'philhealth',
         'sss',
         'advance',
-
+        'total',
     ]; 
 
     public function user(): BelongsTo

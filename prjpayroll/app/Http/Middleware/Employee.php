@@ -17,8 +17,8 @@ class Employee
     public function handle(Request $request, Closure $next): Response
     {
         $type = Auth::user()->userType;
-        if($type != 'user'){
-            if($type == 'admin'){
+        if($type != 'USER'){
+            if($type == 'ADMIN'){
                 return redirect('admin/dashboard');
             }else{
                 return redirect('qr');

@@ -14,26 +14,20 @@ class Employee extends Model
     use HasFactory;
     protected $fillable = [ 
         'role',
-        'hired',
         'userName',
-        'last',
-        'first',
-        'middle',
-        'status',
+        'name',
         'email',
         'phone',
+        'status',
         'job',
         'sss',
         'philhealth',
-        'pagibig',
-        'rate',
         'address',
         'eName',
         'ePhone',
         'eAdd',
         'created_by',
         'edited_by',
-        'password',
     ];
 
     public function user(): BelongsTo

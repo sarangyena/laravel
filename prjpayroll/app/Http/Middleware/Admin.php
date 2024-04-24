@@ -17,7 +17,7 @@ class Admin
     public function handle(Request $request, Closure $next): Response
     {
         $type = Auth::user()->userType;
-        if($type != 'admin'){
+        if($type != 'ADMIN'){
             if($type == 'QR'){
                 return redirect('qr');
             }else{

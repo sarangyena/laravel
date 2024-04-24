@@ -100,9 +100,6 @@ class EmployeeController extends Controller
             //Create Employee
             $validated = $request->validate([
                 'role' => 'required|string|uppercase|max:255',
-                'userName' => 'required|string|uppercase|max:255',
-                'last' => 'required|string|uppercase|max:255',
-                'first' => 'required|string|uppercase|max:255',
                 'middle' => 'nullable|string|uppercase|max:255',
                 'status' => 'required|string|uppercase|max:255',
                 'email' => 'nullable|string|uppercase|max:255',
@@ -110,8 +107,6 @@ class EmployeeController extends Controller
                 'job' => 'required|string|uppercase|max:255',
                 'sss' => 'nullable|string|uppercase|max:255',
                 'philhealth' => 'nullable|string|uppercase|max:255',
-                'pagibig' => 'nullable|string|uppercase|max:255',
-                'rate' => 'required|string|uppercase|max:255',
                 'address' => 'required|string|uppercase|max:255',
                 'eName' => 'nullable|string|uppercase|max:255',
                 'ePhone' => 'nullable|string|uppercase|max:255',
