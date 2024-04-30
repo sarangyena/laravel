@@ -38,7 +38,7 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
         $request->session()->regenerate();
-        if($request->user()->userType === 'admin'){
+        if($request->user()->userType === 'ADMIN'){
             $log = [];
             $log['title'] = "LOGIN";
             $log['log'] = "User " . $request->user()->userName . " login.";

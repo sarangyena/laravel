@@ -13,25 +13,30 @@ return new class extends Migration
     {
         Schema::create('payrolls', function (Blueprint $table) {
             $table->id();
+            $table->string('pay_id')->unique();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('employee_id')->references('id')->on('users')->cascadeOnDelete();
             $table->string('userName')->nullable();
             $table->string('week_id')->nullable();
+            $table->string('month_id')->nullable();
+            $table->string('year_id')->nullable();
             $table->string('week')->nullable();
             $table->string('name')->nullable();
             $table->string('job')->nullable();
             $table->string('rate')->nullable();
-            $table->string('days')->nullable();
-            $table->string('late')->nullable();
-            $table->string('salary')->nullable();
+            $table->string('days')->nullable()->default(0);
+            $table->string('late')->nullable()->default(0);
+            $table->string('salary')->nullable()->default(0);
             $table->string('rph')->nullable();
-            $table->string('hrs')->nullable();
-            $table->string('otpay')->nullable();
-            $table->string('holiday')->nullable();
-            $table->string('philhealth')->nullable();
-            $table->string('sss')->nullable();
-            $table->string('advance')->nullable();
-            $table->string('total')->nullable();
+            $table->string('hrs')->nullable()->default(0);
+            $table->string('otpay')->nullable()->default(0);
+            $table->string('holiday')->nullable()->default(0);
+            $table->string('philhealth')->nullable()->default(0);
+            $table->string('sss')->nullable()->default(0);
+            $table->string('advance')->nullable()->default(0);
+            $table->string('gross')->nullable()->default(0);
+            $table->string('deduction')->nullable()->default(0);
+            $table->string('net')->nullable()->default(0);
             $table->timestamps();
         });
     }

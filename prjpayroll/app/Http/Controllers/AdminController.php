@@ -30,6 +30,8 @@ class AdminController extends Controller
     private $firstDay;
     private $lastDay;
     private $weekId;
+    private $monthId;
+    private $yearId;
     private $admin;
     private $log;
 
@@ -41,6 +43,8 @@ class AdminController extends Controller
         $this->firstDay = $firstDay->format('F j, Y');
         $this->lastDay = $this->current->format('F j, Y');
         $this->weekId = $this->current->week();
+        $this->monthId = $this->current->month;
+        $this->yearId = $this->current->year;
         //Admin
         $this->admin = auth()->user();
         //Log
@@ -50,7 +54,24 @@ class AdminController extends Controller
     }
     public function index(): View
     {
+        $month = Payroll::where('month_id', $this->monthId)->get();
+        $year = Payroll::where('year_id', $this->yearId)->get();
+        $status = Employee::where('eStatus', "INACTIVE")->count();
+        $netM = 0;
+        $netY = 0;
+        foreach($month as $data){
+            $netM += $data->net;
+        };
+        foreach($year as $data){
+            $netY += $data->net;
+        };
+        $count = Employee::count();
         return view('admin.index', [
+            'week' => $this->weekId,
+            'month' => $netM,
+            'year' => $netY,
+            'count' => $count,
+            'status' => $status,
             'log' => $this->log,
         ]);
     }
@@ -63,15 +84,7 @@ class AdminController extends Controller
 
     public function empView(): View
     {
-        $today = Carbon::today();
-        // Example specific date
-        $specificDate = Carbon::parse('2024-01-07');
-
-        // Compare week numbers
-        $isSameWeek = $specificDate->week() === $today->week();
-
         $employee = Employee::paginate(5);
-        
         return view('admin.view', [
             'employees' => $employee,
             'log' => $this->log,
@@ -79,7 +92,7 @@ class AdminController extends Controller
     }
     public function payView(): View
     {
-        $payroll = Payroll::where('week_id', $this->weekId)->paginate(5);
+        $payroll = Payroll::where('week_id', $this->weekId)->paginate(8);
         return view('admin.pay', [
             'payroll' => $payroll,
             'log' => $this->log,
@@ -105,6 +118,9 @@ class AdminController extends Controller
                 'philhealth' => 'nullable|string|uppercase|max:255',
                 'advance' => 'nullable|string|uppercase|max:255',
             ]);
+            $validated['gross'] = $request->holiday + $payroll->gross;
+            $validated['deduction'] = $validated['philhealth'] + $validated['sss'] + $validated['advance'];
+            $validated['net'] = $validated['gross'] - $validated['deduction'];
             $payroll->update($validated);
             $changes = $payroll->getChanges();
             unset($changes['updated_at']);
@@ -144,6 +160,7 @@ class AdminController extends Controller
                 'eAdd' => 'nullable|string|uppercase|max:255',
             ]);
             $name = $request->last . ', ' . $request->first . ' ' . $request->middle;
+            $validated['eStatus'] = "ACTIVE";
             $validated['name'] = $name;
             $validated['created_by'] = $this->admin->name;
             $request->user()->employees()->create($validated);
@@ -182,10 +199,13 @@ class AdminController extends Controller
 
             //Create Payroll
             $payroll = [];
+            $payroll['pay_id'] = Functions::payId();
             $payroll['name'] = $name;
             $payroll['userName'] = $userName;
             $payroll['employee_id'] = $employee->id;
             $payroll['week_id'] = $this->weekId;
+            $payroll['month_id'] = $this->monthId;
+            $payroll['year_id'] = $this->yearId;
             $payroll['week'] = $week;
             $payroll['job'] = $request->job;
             $payroll['rate'] = $request->rate;
@@ -195,7 +215,7 @@ class AdminController extends Controller
             $user = [];
             $user['name'] = $name;
             $user['userName'] = $userName;
-            $user['userType'] = 'EMPLOYEE';
+            $user['userType'] = 'USER';
             $user['password'] = Hash::make($request->last);
             User::create($user);
 

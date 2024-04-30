@@ -15,6 +15,9 @@
                     <x-nav-link :href="route('e-dash')" :active="request()->routeIs('e-dash')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('e-qr')" :active="request()->routeIs('e-qr')">
+                        {{ __('QR') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('e-salary')" :active="request()->routeIs('e-salary')">
                         {{ __('Salary') }}
                     </x-nav-link>
@@ -77,6 +80,9 @@
             <x-responsive-nav-link :href="route('e-dash')" :active="request()->routeIs('e-dash')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('e-qr')" :active="request()->routeIs('e-qr')">
+                {{ __('QR') }}
+            </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('e-salary')" :active="request()->routeIs('e-salary')">
                 {{ __('Salary') }}
             </x-responsive-nav-link>
@@ -86,7 +92,6 @@
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
             </div>
 
             <div class="mt-3 space-y-1">

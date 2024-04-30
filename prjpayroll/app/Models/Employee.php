@@ -27,6 +27,7 @@ class Employee extends Model
         'eAdd',
         'created_by',
         'edited_by',
+        'eStatus',
     ];
     public function user(): BelongsTo
     {

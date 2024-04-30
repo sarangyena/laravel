@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <p class="font-bold text-2xl border-b-2 border-green-300">PAYROLL</p>
+                    <p class="font-bold text-2xl border-b-2 border-green-300">SALARY</p>
                     <form class="flex items-center max-w-sm mt-3">
                         <label for="search" class="sr-only">Search</label>
                         <div class="relative w-full">
@@ -18,7 +18,7 @@
                             </div>
                             <input type="text" id="search"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Search Employee . . ." required />
+                                placeholder="Search Payroll . . ." required />
                         </div>
                     </form>
                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-3">
@@ -45,13 +45,16 @@
                                             ID
                                         </th>
                                         <th scope="col" class="px-6 py-3">
-                                            Username
+                                            Payroll No.
                                         </th>
                                         <th scope="col" class="px-6 py-3">
                                             Name
                                         </th>
                                         <th scope="col" class="px-6 py-3">
                                             Job
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Week
                                         </th>
                                         <th scope="col" class="px-6 py-3">
                                             Rate
@@ -87,26 +90,35 @@
                                             Advance
                                         </th>
                                         <th scope="col" class="px-6 py-3">
-                                            Total
+                                            Gross
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Deduction
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Net
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($payroll as $pay)
                                         <tr
-                                            class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                            class="text-center odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                                             <th scope="row"
                                                 class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                 {{ $pay->id }}
                                             </th>
                                             <td class="px-6 py-1">
-                                                {{ $pay->userName }}
+                                                {{ $pay->pay_id }}
                                             </td>
                                             <td class="px-6 py-1">
                                                 {{ $pay->name }}
                                             </td>
                                             <td class="px-6 py-1">
                                                 {{ $pay->job }}
+                                            </td>
+                                            <td class="px-6 py-1 text-nowrap">
+                                                {{ $pay->week }}
                                             </td>
                                             <td class="px-6 py-1">
                                                 {{ $pay->rate }}
@@ -142,7 +154,13 @@
                                                 {{ $pay->advance }}
                                             </td>
                                             <td class="px-6 py-1">
-                                                {{ $pay->total }}
+                                                {{ $pay->gross }}
+                                            </td>
+                                            <td class="px-6 py-1">
+                                                {{ $pay->deduction }}
+                                            </td>
+                                            <td class="px-6 py-1">
+                                                {{ $pay->net }}
                                             </td>
                                         </tr>
                                     @endforeach

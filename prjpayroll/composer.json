@@ -4,12 +4,14 @@
     "description": "The skeleton application for the Laravel framework.",
     "keywords": ["laravel", "framework"],
     "license": "MIT",
+    "version": "11.0.0",
     "require": {
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^2.1",
         "endroid/qr-code": "^5.0",
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",
+        "rmunate/spell-number": "^1.0",
         "spatie/browsershot": "^4.0",
         "spatie/laravel-pdf": "^1.5"
     },

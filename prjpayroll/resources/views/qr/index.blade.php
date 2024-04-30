@@ -52,7 +52,6 @@
                             $user['image_data'] = '';
                         }
                     @endphp
-
                     <div class="mt-3 columns-2">
                         <video id="preview" class="w-80 mx-auto"></video>
                         <div>
@@ -60,11 +59,10 @@
                                 enctype="multipart/form-data">
                                 @csrf
                                 <div>
-                                    <p class="font-bold text-2xl border-b-2 border-green-300">LAST LOGIN</p>
-                                    <div class="columns-2">
-                                        <img src="{{ asset('images/user.png') }}" class="w-24 mx-auto my-auto"
+                                    <img src="{{ asset('images/user.png') }}" class="w-24 mx-auto"
                                             id="imagePreview">
-                                        <div class="my-auto">
+                                    <div class="columns-2 mt-3">
+                                        <div>
                                             <x-input-label for="userName" :value="__('User ID:')" />
                                             <x-text-input id="userName" class="block mt-1 w-full uppercase"
                                                 type="text" name="userName"
@@ -82,10 +80,10 @@
                                                 type="text" name="job" value="{{ old('job', $user['job']) }}"
                                                 readonly />
                                         </div>
-                                    </div>
-                                    <x-input-label for="name" :value="__('Name:')" />
-                                    <x-text-input id="name" class="block mt-1 w-full uppercase" type="text"
+                                        <x-input-label for="name" :value="__('Name:')" />
+                                        <x-text-input id="name" class="block mt-1 w-full uppercase" type="text"
                                         name="name" value="{{ old('name', $user['name']) }}" readonly />
+                                    </div>
                                 </div>
 
                             </form>
@@ -128,6 +126,9 @@
                                             Job
                                         </th>
                                         <th scope="col" class="px-6 py-3">
+                                            Timezone
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
                                             IP Address
                                         </th>
                                         <th scope="col" class="px-6 py-3">
@@ -160,6 +161,9 @@
                                             </td>
                                             <td class="px-6 py-1">
                                                 {{ $data->job }}
+                                            </td>
+                                            <td class="px-6 py-1">
+                                                {{ $data->timezone }}
                                             </td>
                                             <td class="px-6 py-1">
                                                 {{ $data->ip }}
@@ -214,6 +218,7 @@
             });
 
             scanner.addListener('scan', function(content) {
+                console.log(content);
                 navigator.geolocation.getCurrentPosition((position) => {
                     const data = {
                         id: content,
@@ -221,34 +226,34 @@
                         longitude: position.coords.longitude,
                     };
                     const request = [
-                axios.post('qr/find',data),
-                axios.post('qr/image',data, {responseType: 'blob'}),
-                axios.post('qr/check', data),
-            ];
-            Promise.all(request)
-                .then(responses => {
-                    const data1 = responses[0].data;
-                    const data3 = responses[2].data;
-                    $('#userName').val(data1.userName);
-                    $('#role').val(data1.role);
-                    $('#job').val(data1.job);
-                    $('#name').val(data1.name);
+                        axios.post('qr/find',data),
+                        axios.post('qr/image',data, {responseType: 'blob'}),
+                        axios.post('qr/check', data),
+                    ];
+                    Promise.all(request)
+                        .then(responses => {
+                            const data1 = responses[0].data;
+                            const data3 = responses[2].data;
+                            $('#userName').val(data1.userName);
+                            $('#role').val(data1.role);
+                            $('#job').val(data1.job);
+                            $('#name').val(data1.name);
 
-                    const blobData = responses[1].data;
-                    const blobUrl = URL.createObjectURL(blobData);
-                    $('#imagePreview').attr('src', blobUrl);
+                            const blobData = responses[1].data;
+                            const blobUrl = URL.createObjectURL(blobData);
+                            $('#imagePreview').attr('src', blobUrl);
 
-                    var form = $('#qrForm');
-                    if(data3.check == 'login' || data3.check == 'null'){
-                        form.attr('action', '{{route('qr-store')}}');
-                        form.submit();
-                    }else if(data3.check == 'logout'){
-                        form.attr('action', '{{route('qr-update')}}');
-                        form.append('<input type="hidden" name="_method" value="PATCH">');
-                        form.submit();
-                    }
-                })
-            })
+                            var form = $('#qrForm');
+                            if(data3.check == 'login' || data3.check == 'null'){
+                                form.attr('action', '{{route('qr-store')}}');
+                                form.submit();
+                            }else if(data3.check == 'logout'){
+                                form.attr('action', '{{route('qr-update')}}');
+                                form.append('<input type="hidden" name="_method" value="PATCH">');
+                                form.submit();
+                            }
+                        })
+                    })
                 });
                 
             

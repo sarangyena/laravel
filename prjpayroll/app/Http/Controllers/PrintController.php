@@ -4,21 +4,74 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use App\Models\Payroll;
+use App\Models\QRLogin;
 use Illuminate\Http\Request;
 //Print
-use Spatie\LaravelPdf\Facades\Pdf;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
+use NumberFormatter;
+use Rmunate\Utilities\SpellNumber;
 
 class PrintController extends Controller
 {
-    public function __invoke()
+    public function payslip($id)
     {
-        Pdf::view('admin.sample', [
-            'invoiceNumber' => '1234',
-            'customerName' => 'Grumpy Cat',
-        ])
-    ->format('a4')
-    ->save('invoice.pdf');
-
-
+        $payroll = Payroll::findOrFail($id);
+        $convert = Functions::convert_number_to_words($payroll->net);
+        if($convert == false){
+            $convert = "zero";
+        }
+        $pdf = Pdf::loadView('admin.payslip', [
+            'convert' => $convert,
+            'payroll' => $payroll,
+        ]);
+        return $pdf->stream('INVOICE');        
+    }
+    public function payroll($page)
+    {
+        $data = Payroll::all()->slice(($page - 1) * 8, 8);
+        $salary = 0;
+        $rph = 0;
+        $hrs = 0;
+        $ot = 0;
+        $holiday = 0;
+        $philhealth = 0;
+        $sss = 0;
+        $advance = 0;
+        $gross = 0;
+        $deduction = 0;
+        $net = 0;
+        foreach($data as $key){
+            $salary += $key->salary;
+            $rph += $key->rph;
+            $hrs += $key->hrs;
+            $ot += $key->otpay;
+            $holiday += $key->holiday;
+            $philhealth += $key->philhealth;
+            $sss += $key->sss;
+            $advance += $key->advance;
+            $gross += $key->gross;
+            $deduction += $key->deduction;
+            $net += $key->net;
+        }
+        $total = new Employee();
+        $total->salary = $salary;
+        $total->salary = $salary;
+        $total->rph = $rph;
+        $total->hrs = $hrs;
+        $total->otpay = $ot;
+        $total->holiday = $holiday;
+        $total->philhealth = $philhealth;
+        $total->sss = $sss;
+        $total->advance = $advance;
+        $total->gross = $gross;
+        $total->deduction = $deduction;
+        $total->net = $net;
+        
+        $pdf = Pdf::setPaper('A4','landscape')->loadView('admin.payroll',[
+            'payroll' => $data,
+            'total' => $total,
+        ]);
+        return $pdf->stream('INVOICE');     
     }
 }

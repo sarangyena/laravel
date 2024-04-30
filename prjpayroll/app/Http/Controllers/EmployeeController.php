@@ -7,6 +7,7 @@ use App\Models\Employee;
 use App\Models\Image;
 use App\Models\Log;
 use App\Models\Payroll;
+use App\Models\QRLogin;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\RedirectResponse;
@@ -31,16 +32,46 @@ class EmployeeController extends Controller
 
      // Define a class property
     private $user;
+    private $current;
+    private $weekId;
     public function __construct()
     {
+        $this->current = Carbon::now();
+        $this->weekId = $this->current->week();
         //User
         $this->user = auth()->user();
+    }
+    public function index(): View
+    {
+        $dash = Payroll::where('userName', $this->user->userName)->get();
+        $gross = 0;
+        $deduction = 0;
+        $net = 0;
+        foreach($dash as $data) {
+            $gross += $data->gross;
+            $deduction += $data->deduction;
+            $net += $data->net;
+        }
+        $qr = QRLogin::where('week_id', $this->weekId)->get();
+        return view('employee.index',[
+            'gross' => $gross,
+            'deduction' => $deduction,
+            'net' => $net,
+            'qr' => $qr,
+        ]);
     }
     public function salary(): View
     {
         $salary = Payroll::where('userName', $this->user->userName)->paginate(5);
         return view('employee.salary',[
             'payroll' => $salary,
+        ]);
+    }
+    public function qr(): View
+    {
+        $qr = QRLogin::where('userName', $this->user->userName)->paginate(10);
+        return view('employee.qr',[
+            'qr' => $qr,
         ]);
     }
 }

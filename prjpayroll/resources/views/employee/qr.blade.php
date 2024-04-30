@@ -1,7 +1,7 @@
 <x-employee-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
+            {{ __('QR') }}
         </h2>
     </x-slot>
 
@@ -9,23 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <p class="font-bold text-2xl border-b-2 border-green-300">DASHBOARD</p>
-                    <div class="columns-3 mt-3">
-                        <div class="bg-white rounded-lg shadow-lg dark:bg-gray-800">
-                            <p class="text-2xl text-center border-b-2 border-green-300 mx-5">GROSS PAY</p>
-                            <p class="text-4xl text-center py-10">₱ {{ $gross }}</p>
-                        </div>
-                        <div class="bg-white rounded-lg shadow-lg dark:bg-gray-800">
-                            <p class="text-2xl text-center border-b-2 border-green-300 mx-5">DEDUCTIONS</p>
-                            <p class="text-4xl text-center py-10">₱ {{ $deduction }}</p>
-                        </div>
-                        <div class="bg-white rounded-lg shadow-lg dark:bg-gray-800">
-                            <p class="text-2xl text-center border-b-2 border-green-300 mx-5">NET PAY</p>
-                            <p class="text-4xl text-center py-10">₱ {{ $net }}</p>
-                        </div>
-                    </div>
-
-                    <p class="font-bold text-2xl border-b-2 border-green-300 mt-10">QR LOGIN</p>
+                    <p class="font-bold text-2xl border-b-2 border-green-300">QR LOGINS</p>
                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-3">
                         @if ($qr->isEmpty())
                             <div class="flex items-center p-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800"
@@ -80,50 +64,53 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($qr as $data)
-                                        <tr data-id="{{ $data->id }}"
-                                            class="text-center odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                            <th scope="row"
-                                                class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                {{ $data->id }}
-                                            </th>
+                                    <tr data-id="{{ $data->id }}"
+                                        class="text-center odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                        <th scope="row"
+                                            class="px-6 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{ $data->id }}
+                                        </th>
+                                        <td class="px-6 py-1">
+                                            {{ $data->role }}
+                                        </td>
+                                        <td class="px-6 py-1">
+                                            {{ $data->userName }}
+                                        </td>
+                                        <td class="px-6 py-1">
+                                            {{ $data->name }}
+                                        </td>
+                                        <td class="px-6 py-1">
+                                            {{ $data->job }}
+                                        </td>
+                                        <td class="px-6 py-1">
+                                            {{ $data->timezone }}
+                                        </td>
+                                        <td class="px-6 py-1">
+                                            {{ $data->ip }}
+                                        </td>
+                                        <td class="px-6 py-1">
+                                            {{ $data->geo }}
+                                        </td>
+                                        <td class="px-6 py-1">
+                                            {{ $data->created_at }}
+                                        </td>
+                                        @if ($data->created_at->eq($data->updated_at))
                                             <td class="px-6 py-1">
-                                                {{ $data->role }}
-                                            </td>
-                                            <td class="px-6 py-1">
-                                                {{ $data->userName }}
-                                            </td>
-                                            <td class="px-6 py-1">
-                                                {{ $data->name }}
-                                            </td>
-                                            <td class="px-6 py-1">
-                                                {{ $data->job }}
-                                            </td>
-                                            <td class="px-6 py-1">
-                                                {{ $data->timezone }}
-                                            </td>
-                                            <td class="px-6 py-1">
-                                                {{ $data->ip }}
-                                            </td>
-                                            <td class="px-6 py-1">
-                                                {{ $data->geo }}
-                                            </td>
-                                            <td class="px-6 py-1">
-                                                {{ $data->created_at }}
-                                            </td>
-                                            @if ($data->created_at->eq($data->updated_at))
-                                                <td class="px-6 py-1">
 
-                                                </td>
-                                            @else
-                                                <td class="px-6 py-1">
-                                                    {{ $data->updated_at }}
-                                                </td>
-                                            @endif
-                                        </tr>
+                                            </td>
+                                        @else
+                                            <td class="px-6 py-1">
+                                                {{ $data->updated_at }}
+                                            </td>
+                                        @endif
+                                    </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         @endif
+                    </div>
+                    <div class="mt-4">
+                        {{ $qr->links() }}
                     </div>
                 </div>
             </div>

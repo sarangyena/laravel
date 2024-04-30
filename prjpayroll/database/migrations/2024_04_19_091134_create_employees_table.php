@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('eAdd')->nullable();
             $table->string('created_by')->nullable();
             $table->string('edited_by')->nullable();
+            $table->string('eStatus')->nullable();
             $table->timestamps();
         });
     }

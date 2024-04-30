@@ -12,7 +12,7 @@ use Spatie\LaravelPdf\Facades\Pdf;
 
 //Admin and User Dashboard
 Route::get('admin/dashboard', [AdminController::class,'index'])->middleware(['auth','admin'])->name('a-dash');
-Route::get('employee/dashboard', [UserController::class,'index'])->middleware(['auth','user'])->name('e-dash');
+Route::get('employee/dashboard', [EmployeeController::class,'index'])->middleware(['auth','user'])->name('e-dash');
 
 //If authenticated, go to dashboard
 Route::get('/', function(){
@@ -51,7 +51,7 @@ Route::middleware(['auth','admin'])->group(function(){
 //Employee
 Route::middleware(['auth','user'])->group(function(){
     Route::get('employee/salary', [EmployeeController::class, 'salary'])->name('e-salary');
-
+    Route::get('employee/qr', [EmployeeController::class, 'qr'])->name('e-qr');
 });
 
 
@@ -66,7 +66,8 @@ Route::middleware(['auth','QR'])->group(function () {
     Route::patch('qr/update', [QR::class,'update'])->name('qr-update');
 });
 //Print
-Route::get('print/', [PrintController::class,'__invoke'])->name('print');
+Route::get('print/{id}/', [PrintController::class,'payslip'])->name('print');
+Route::get('print/payroll/{id}/', [PrintController::class,'payroll'])->name('p-payroll');
 
 //Route::get('print',[PrintController::class,'index'])->name('print');
 Route::middleware('auth')->group(function () {

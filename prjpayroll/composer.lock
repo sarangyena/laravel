@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "14f4351626e7ab6f1d8ed47c40652f26",
+    "content-hash": "1d17c611d2074666cb6aecfa50d171bb",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -3589,6 +3589,58 @@
                 }
             ],
             "time": "2023-11-08T05:53:05+00:00"
+        },
+        {
+            "name": "rmunate/spell-number",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rmunate/SpellNumber.git",
+                "reference": "c225b10c03a82570c0be2ad0a1e916c2637aadcf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rmunate/SpellNumber/zipball/c225b10c03a82570c0be2ad0a1e916c2637aadcf",
+                "reference": "c225b10c03a82570c0be2ad0a1e916c2637aadcf",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Rmunate\\Utilities\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Raul Mauricio Uñate Castro",
+                    "email": "raulmauriciounate@gmail.com"
+                }
+            ],
+            "description": "Convierta de números a letras, ideal para uso en facturas, remisiones ó similares.",
+            "keywords": [
+                "altum",
+                "letras",
+                "numeros",
+                "rmunate",
+                "spell"
+            ],
+            "support": {
+                "issues": "https://github.com/rmunate/SpellNumber/issues",
+                "source": "https://github.com/rmunate/SpellNumber/tree/v1.0.0"
+            },
+            "time": "2023-02-13T12:59:28+00:00"
         },
         {
             "name": "sabberworm/php-css-parser",

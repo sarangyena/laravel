@@ -14,11 +14,13 @@ class QRLogin extends Model
     protected $guarded = ['updated_at'];
     protected $fillable = [
         'userName',
+        'week_id',
         'role',
         'job',
         'name',
         'ip',
-        'geo'
+        'geo',
+        'timezone',
     ];
     public function user(): BelongsTo
     {

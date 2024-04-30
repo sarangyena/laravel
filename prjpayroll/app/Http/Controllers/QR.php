@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use App\Models\Image;
+use App\Models\Payroll;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Models\QRLogin;
@@ -18,9 +19,27 @@ use function PHPUnit\Framework\isEmpty;
 
 class QR extends Controller
 {
+    private $current;
+    private $firstDay;
+    private $lastDay;
+    private $week;
+    private $weekId;
+    private $timezone;
+    public function __construct()
+    {
+        //Dates
+        $this->current = Carbon::today();
+        $firstDay = $this->current->copy()->startOfWeek();
+        $this->firstDay = $firstDay->format('F j, Y');
+        $this->lastDay = $this->current->format('F j, Y');
+        $this->week = $this->firstDay." - ".$this->lastDay;
+        $this->weekId = $this->current->week();
+        $this->timezone = config('app.timezone');
+
+    }
     public function index()
     {
-        $qr = QRLogin::latest('updated_at')->paginate(5);
+        $qr = QRLogin::where('week_id', $this->weekId)->latest('updated_at')->paginate(5);
         return view('qr.index',[
             'qr' => $qr,
         ]);
@@ -100,28 +119,44 @@ class QR extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $today = Carbon::today();
-        $record = QRLogin::whereDate('created_at', $today)->get();
         $qr = Employee::where('userName', $request->userName)->first();
+        $payroll = Payroll::where('userName', $request->userName)->first();
+        $image = Image::findOrFail($qr->id);
+
+        $created = Carbon::now();
+        $late = Carbon::createFromTimeString('08:16:00');
+        $diff = $late->diffInHours($created);
+        $diff = number_format($diff,2);
+
+        
+        $record = QRLogin::whereDate('created_at', $created)->count();
         if(is_null($qr)) {
             return redirect('qr')->with('error', 'The user does not exist.');
-        }else if(!$record->isEmpty()){
-            return redirect('qr')->with('error', 'The user already login today.');
+        }else if($record == 2){
+            return redirect('qr')->with('error', 'Limited to only 2 login per day.');
         }else{
             $loc = session()->get('loc');
             try {
                 //Create Employee
                 $validated = $request->validate([
-                    'userName' => 'required|string|uppercase|max:255',
-                    'role' => 'required|string|uppercase|max:255',
-                    'job' => 'required|string|uppercase|max:255',
-                    'name' => 'required|string|uppercase|max:255',
+                    'userName' => 'nullable|string|uppercase|max:255',
+                    'role' => 'nullable|string|uppercase|max:255',
+                    'job' => 'nullable|string|uppercase|max:255',
+                    'name' => 'nullable|string|uppercase|max:255',
                 ]);
+                $validated['timezone'] = $this->timezone;
+                $validated['week_id'] = $this->weekId;
                 $validated['ip'] = $request->ip();
                 $validated['geo'] = $loc['longitude'].', '.$loc['latitude'];
-                $employee = Employee::where('userName', $validated['userName'])->first();
-                $employee->qr()->create($validated);
-                $image = Image::findOrFail($employee->id);
+                $qr->qr()->create($validated);
+                if($diff > 0){
+                    $diff += 0.5;
+                    $data = [];
+                    $data['week'] = $this->week;
+                    $data['week_id'] = $this->weekId;
+                    $data['late'] = $payroll->late + $diff;
+                    $payroll->update($data);
+                }
                 $validated['image_data'] = $image->image_data;
                 session()->put('data', $validated);
                 return redirect('qr')->with('success', 'Successfully login.');
@@ -134,16 +169,57 @@ class QR extends Controller
     public function update(Request $request): RedirectResponse
     {
         $qr = QRLogin::where('userName', $request->userName)->latest('updated_at')->first();
+        $emp = Payroll::where('userName', $request->userName)->first();
         try {
-            $validated = $request->validate([
-                'userName' => 'required|string|uppercase|max:255',
-                'role' => 'required|string|uppercase|max:255',
-                'job' => 'required|string|uppercase|max:255',
-                'name' => 'required|string|uppercase|max:255',
-            ]);
+            $qr->week_id = $this->weekId;
             $qr->timestamps = false;
+            $qr->timezone = $this->timezone;
             $qr->updated_at = now(); // or any other timestamp value
             $qr->save();
+
+            $created = Carbon::parse($qr->created_at);
+            $updated = Carbon::parse('2024-04-30 19:00:00');
+            $hours = $created->diffInHours($updated);
+            $hours = number_format($hours, 2);
+
+            $timein = Carbon::parse('2024-04-30 08:00:00');
+            $diff1 = $created->diffInHours($timein);
+            $diff1 = number_format($diff1, 2);
+            if($diff1 > 0){
+                $hours = $hours - $diff1;
+            }
+
+            $ot = Carbon::parse('2024-04-30 18:00:00');
+            $diff = $ot->diffInHours($updated);
+            $diff = number_format($diff,2);
+            if($diff < 0) {
+                $diff = 0;
+            }
+            
+            $payroll = [];
+            $payroll['days'] = number_format($hours/8, 0) + $emp->days;
+            $payroll['salary'] = number_format($emp->salary+($emp->rate*$payroll['days']+($emp->rate/8)*$emp->late), 2);
+            $payroll['hrs'] = $emp->hrs + $diff;
+            $payroll['otpay'] = number_format($emp->otpay+($emp->rph*$payroll['hrs']),2);
+            $payroll['gross'] = number_format($payroll['salary']+$payroll['otpay']+$emp->holiday,2);
+            $payroll['deduction'] = $emp->philhealth+$emp->sss+$emp->advance;
+            $payroll['net'] = number_format($payroll['gross']-$payroll['deduction'],2);
+            $emp->update($payroll);
+
+
+            $emp1 = Employee::all();
+            foreach ($emp1 as $data) {
+                $user = QRLogin::where('userName', $data->userName)->latest('updated_at')->first();
+                $time1 = Carbon::parse($user->updated_at);
+                $time2 = Carbon::now();
+                $diff = $time1->diffInDays($time2);
+                if($diff >= 30){
+                    $emp2 = Employee::where('userName', $data->userName)->first();
+                    $update = [];
+                    $update['eStatus'] = "INACTIVE";
+                    $emp2->update($update);
+                }
+            }
             return redirect('qr')->with('success', 'Successfully logout.');
         } catch (\Exception $e) {
             return redirect('qr')->with('error', $e->getMessage());

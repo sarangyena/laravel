@@ -8,8 +8,33 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("You're logged in!") }}
+                <div class="p-4 text-gray-900 dark:text-gray-100">
+                    <p class="font-bold text-2xl border-b-2 border-green-300">PAYROLL</p>
+                    <div class="columns-3 mt-3">
+                        <div class="bg-white rounded-lg shadow-lg dark:bg-gray-800">
+                            <p class="text-xl text-center border-b-2 border-green-300 mx-5">TOTAL PAYROLL LAST MONTH</p>
+                            <p class="text-4xl text-center py-10">₱ {{ $month }}</p>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-lg dark:bg-gray-800">
+                            <p class="text-xl text-center text-nowrap border-b-2 border-green-300 mx-5">TOTAL PAYROLL YEAR TO DATE</p>
+                            <p class="text-4xl text-center py-10">₱ {{ $year }}</p>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-lg dark:bg-gray-800">
+                            <p class="text-xl text-center border-b-2 border-green-300 mx-5">CURRENT PERIOD</p>
+                            <p class="text-4xl text-center py-10">{{ $week }}th Period</p>
+                        </div>
+                    </div>
+                    <p class="font-bold text-2xl border-b-2 border-green-300 mt-5">EMPLOYEES</p>
+                    <div class="columns-2 mt-3">
+                        <div class="bg-white rounded-lg shadow-lg dark:bg-gray-800">
+                            <p class="text-xl text-center border-b-2 border-green-300 mx-5">TOTAL EMPLOYEES</p>
+                            <p class="text-4xl text-center py-10">{{ $count }}</p>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-lg dark:bg-gray-800">
+                            <p class="text-xl text-center border-b-2 border-green-300 mx-5">INACTIVE EMPLOYEES</p>
+                            <p class="text-4xl text-center py-10">{{ $status }}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

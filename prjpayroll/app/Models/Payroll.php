@@ -11,10 +11,13 @@ class Payroll extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'pay_id',
         'userName',
         'employee_id',
         'name',
         'week_id',
+        'month_id',
+        'year_id',
         'week',
         'job',
         'rate',
@@ -28,7 +31,9 @@ class Payroll extends Model
         'philhealth',
         'sss',
         'advance',
-        'total',
+        'gross',
+        'deduction',
+        'net',
     ]; 
     public function user(): BelongsTo
     {

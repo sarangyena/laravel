@@ -12,17 +12,26 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <p class="font-bold text-2xl border-b-2 border-green-300">PAYROLL</p>
-                    <form class="flex items-center max-w-sm mt-3">
-                        <label for="search" class="sr-only">Search</label>
-                        <div class="relative w-full">
-                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                <img src="{{ asset('images/loupe.png') }}" class="w-4">
+                    <div class="flex justify-between">
+                        <form class="flex items-center max-w-sm m-2">
+                            <label for="search" class="sr-only">Search</label>
+                            <div class="relative w-full">
+                                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                    <img src="{{ asset('images/loupe.png') }}" class="w-4">
+                                </div>
+                                <input type="text" id="search"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Search Payroll . . ." required />
                             </div>
-                            <input type="text" id="search"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Search Employee . . ." required />
-                        </div>
-                    </form>
+                        </form>
+                        <button type="button" class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 rounded-lg px-4 py-1.5 text-center m-2">
+                            <a href="{{route('p-payroll', $payroll->currentPage())}}"
+                                id="print"
+                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                <img src="{{ asset('images/printer.png') }}" class="w-7">
+                            </a>
+                        </button>
+                    </div>
                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-3">
                         @if (session('delete'))
                             <div class="flex items-center p-4 mb-4 mt-2 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800"
@@ -87,10 +96,16 @@
                                             ID
                                         </th>
                                         <th scope="col" class="px-6 py-3">
+                                            Payroll No.
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Username
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
                                             Date Hired
                                         </th>
                                         <th scope="col" class="px-6 py-3">
-                                            Print
+                                            Payslip
                                         </th>
                                         <th scope="col" class="px-6 py-3">
                                             Edit
@@ -151,22 +166,28 @@
                                                 {{ $pay->id }}
                                             </th>
                                             <td class="px-6 py-1">
+                                                {{$pay->pay_id}}
+                                            </td>
+                                            <td class="px-6 py-1">
+                                                {{$pay->userName}}
+                                            </td>
+                                            <td class="px-6 py-1">
                                                 {{$pay->created_at}}
                                             </td>
                                             <td class="px-6 py-1">
                                                 <a href="{{route('print', $pay->id)}}"
                                                     id="print"
                                                     class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                                                    <img src="{{ asset('images/printer.png') }}" class="w-7">
+                                                    <img src="{{ asset('images/printer.png') }}" class="w-7 mx-auto">
                                                 </a>
                                             </td>
                                             <td class="px-6 py-1">
                                                 <a href="{{ route('a-payEdit', $pay->id) }}" id="edit"
                                                     class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                                                    <img src="{{ asset('images/edit.png') }}">
+                                                    <img src="{{ asset('images/edit.png') }}" class="w-7 mx-auto">
                                                 </a>
                                             </td>
-                                            <td class="px-6 py-1">
+                                            <td class="px-6 py-1 text-nowrap">
                                                 {{ $pay->week }}
                                             </td>
                                             <td class="px-6 py-1">
@@ -209,7 +230,7 @@
                                                 {{ $pay->advance }}
                                             </td>
                                             <td class="px-6 py-1">
-                                                {{ $pay->total }}
+                                                {{ $pay->net }}
                                             </td>
                                         </tr>
                                     @endforeach
