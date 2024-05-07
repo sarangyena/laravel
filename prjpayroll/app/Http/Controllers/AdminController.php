@@ -90,8 +90,37 @@ class AdminController extends Controller
             'log' => $this->log,
         ]);
     }
-    public function payView(): View
+    public function payView(Request $request): View
     {
+        $week = $this->firstDay . ' - ' . $this->lastDay;
+        $payroll = Payroll::where('week_id', $this->weekId)->get();
+        if($payroll->count() >= 1){
+            foreach($payroll as $pay){
+                $temp = [];
+                $temp['week'] = $week;
+                $pay->update($temp);
+            }
+        }else{
+            $payroll = Payroll::where('week_id', $this->weekId-1)->latest()->first();
+            if($payroll->week_id < $this->weekId){
+                $payroll = Payroll::where('week_id', $this->weekId-1)->get();
+                foreach($payroll as $pay){
+                    $temp = [];
+                    $temp['pay_id'] = Functions::payId();
+                    $temp['name'] = $pay->name;
+                    $temp['userName'] = $pay->userName;
+                    $temp['employee_id'] = $pay->employee_id;
+                    $temp['week_id'] = $this->weekId;
+                    $temp['month_id'] = $this->monthId;
+                    $temp['year_id'] = $this->yearId;
+                    $temp['week'] = $week;
+                    $temp['job'] = $pay->job;
+                    $temp['rate'] = $pay->rate;
+                    $temp['rph'] = $pay->rate / 8 + ($pay->rate / 8) * 0.2;
+                    $request->user()->payroll()->create($temp);
+                }
+            }
+        }
         $payroll = Payroll::where('week_id', $this->weekId)->paginate(8);
         return view('admin.pay', [
             'payroll' => $payroll,

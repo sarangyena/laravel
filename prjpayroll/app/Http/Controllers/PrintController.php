@@ -14,6 +14,15 @@ use Rmunate\Utilities\SpellNumber;
 
 class PrintController extends Controller
 {
+    private $current;
+    private $weekId;
+
+    public function __construct()
+    {
+        //Dates
+        $this->current = Carbon::today();
+        $this->weekId = $this->current->week();
+    }
     public function payslip($id)
     {
         $payroll = Payroll::findOrFail($id);
@@ -29,7 +38,8 @@ class PrintController extends Controller
     }
     public function payroll($page)
     {
-        $data = Payroll::all()->slice(($page - 1) * 8, 8);
+        $data = Payroll::where('week_id', $this->weekId)->get();
+        $data = $data->slice(($page - 1) * 8, 8);
         $salary = 0;
         $rph = 0;
         $hrs = 0;
@@ -55,7 +65,6 @@ class PrintController extends Controller
             $net += $key->net;
         }
         $total = new Employee();
-        $total->salary = $salary;
         $total->salary = $salary;
         $total->rph = $rph;
         $total->hrs = $hrs;
