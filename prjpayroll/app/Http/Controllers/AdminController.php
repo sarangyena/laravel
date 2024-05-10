@@ -162,7 +162,7 @@ class AdminController extends Controller
             $log['title'] = "EDIT PAYROLL";
             $log['log'] = "User " . $this->admin->userName . " edited " . $payroll->userName . " details. The columns edited are " . $sentence . ".";
             $request->user()->log()->create($log);
-            return redirect(route('a-payroll'))->with('update', 'Successfully Updated Payroll.');
+                return redirect(route('a-payroll'))->with('update', 'Successfully Updated Payroll.');
         } catch (\Exception $e) {
             return redirect(route('a-payroll'))->with('error', $e->getMessage());
         }

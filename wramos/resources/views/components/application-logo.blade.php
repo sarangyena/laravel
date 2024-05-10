@@ -1,1 +1,1 @@
-<img src="{{asset('images/inline.png')}}" {{$attributes}}
+<img src="{{asset('images/logo-inline.png')}}" {{$attributes}}

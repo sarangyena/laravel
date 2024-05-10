@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\Route;
 use Spatie\LaravelPdf\Facades\Pdf;
 
 //Admin and User Dashboard
-Route::get('admin/dashboard', [AdminController::class,'index'])->middleware(['auth','admin'])->name('a-dash');
-Route::get('employee/dashboard', [EmployeeController::class,'index'])->middleware(['auth','user'])->name('e-dash');
 
 //If authenticated, go to dashboard
 Route::get('/', function(){
@@ -33,6 +31,7 @@ Route::get('/', function(){
 //Admin
 Route::middleware(['auth','admin'])->group(function(){
     //Employee
+    Route::get('admin/dashboard', [AdminController::class,'index'])->name('a-dash');
     Route::get('admin/employee', [AdminController::class, 'empIndex'])->name('a-employee');
     Route::post('admin/store', [AdminController::class, 'store'])->name('a-store');
     Route::get('admin/view', [AdminController::class, 'empView'])->name('a-view');
@@ -50,6 +49,7 @@ Route::middleware(['auth','admin'])->group(function(){
 
 //Employee
 Route::middleware(['auth','user'])->group(function(){
+    Route::get('employee/dashboard', [EmployeeController::class,'index'])->name('e-dash');
     Route::get('employee/salary', [EmployeeController::class, 'salary'])->name('e-salary');
     Route::get('employee/qr', [EmployeeController::class, 'qr'])->name('e-qr');
 });

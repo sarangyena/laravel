@@ -19,8 +19,8 @@
     <body class="font-sans text-gray-900 antialiased">
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
             <div>
-                <a href="/">
-                    <x-application-logo class="w-28 h-28 fill-current text-gray-500" />
+                <a>
+                    <x-application-logo class="w-auto h-14 fill-current text-gray-500" />
                 </a>
             </div>
 
@@ -28,6 +28,5 @@
                 {{ $slot }}
             </div>
         </div>
-        <script src="/node_modules/flowbite/dist/flowbite.min.js"></script>
     </body>
 </html>
