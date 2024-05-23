@@ -15,12 +15,12 @@
                     <x-nav-link :href="route('a-dash')" :active="request()->routeIs('a-dash') || request()->routeIs('index')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('a-employee')" :active="request()->routeIs('a-employee') ||
+                    <x-nav-link :href="route('a-view')" :active="request()->routeIs('a-employee') ||
                         request()->routeIs('a-view') ||
                         request()->routeIs('a-edit')">
                         {{ __('Employee') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('a-payroll')" :active="request()->routeIs('a-payroll') || request()->routeIs('a-payEdit')">
+                    <x-nav-link :href="route('a-payroll')" :active="request()->routeIs('a-payroll') || request()->routeIs('a-payEdit') || request()->routeIs('a-all')">
                         {{ __('Payroll') }}
                     </x-nav-link>
                 </div>
@@ -95,7 +95,7 @@
             <x-responsive-nav-link :href="route('a-dash')" :active="request()->routeIs('a-dash') || request()->routeIs('index')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('a-employee')" :active="request()->routeIs('a-employee') ||
+            <x-responsive-nav-link :href="route('a-view')" :active="request()->routeIs('a-employee') ||
                 request()->routeIs('a-view') ||
                 request()->routeIs('a-edit')">
                 {{ __('Employee') }}

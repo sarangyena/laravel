@@ -55,7 +55,7 @@
                 <div class="container rounded-lg bg-white h-4/5 w-auto p-5">
                     <img src="{{asset('images/'.$item->image_data)}}" class="mx-auto p-5" id="imagePreview">
                     <h1 class="text-3xl font-bold">{{$item->name}}</h1>
-                    <p class="text-sm">₱ {{$item->fee}}</p>
+                    <p class="text-sm"><strong>Fee:</strong> ₱ {{$item->fee}}</p>
                     <p class="text-justify text-sm">{{$item->description}}</p>
                     <a href = "{{route('register')}}">
                         <button type="button" class="container mt-3 text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Book</button>
@@ -124,7 +124,7 @@
         <p class="text-lg"><strong>Phone:</strong> (+63) 932-539-7973</p>
         <p class="text-lg"><strong>Office Hours:</strong> Monday to Saturday (8:00 AM to 4:30PM)</p>
         <p class="text-lg"><strong>Email Address:</strong> wramosdiagnosticlaboratory@gmail.com</p>
-        <p class="text-lg font-bold">Copyright © 2014, All rights reserved.</p>
+        <p class="text-lg font-bold mt-5">Copyright © 2014, All rights reserved.</p>
     </div>
 </x-app-layout>
 

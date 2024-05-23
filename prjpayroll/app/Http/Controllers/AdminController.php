@@ -12,6 +12,7 @@ use App\Models\Image;
 use App\Models\Log;
 use App\Models\Payroll;
 use App\Models\User;
+use App\Models\QRLogin;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
@@ -54,15 +55,26 @@ class AdminController extends Controller
     }
     public function index(): View
     {
+        $emp = Employee::all();
+        foreach ($emp as $e) {
+            $qr = QRLogin::where('userName', $e->userName)->latest()->first();
+            $last = Carbon::parse($qr->updated_at);
+            $diff = $last->diffInDays(Carbon::now());
+            if ($diff >= 30) {
+                $temp = [];
+                $temp['eStatus'] = 'INACTIVE';
+                $e->update($temp);
+            }
+        }
         $month = Payroll::where('month_id', $this->monthId)->get();
         $year = Payroll::where('year_id', $this->yearId)->get();
         $status = Employee::where('eStatus', "INACTIVE")->count();
         $netM = 0;
         $netY = 0;
-        foreach($month as $data){
+        foreach ($month as $data) {
             $netM += $data->net;
         };
-        foreach($year as $data){
+        foreach ($year as $data) {
             $netY += $data->net;
         };
         $count = Employee::count();
@@ -94,17 +106,17 @@ class AdminController extends Controller
     {
         $week = $this->firstDay . ' - ' . $this->lastDay;
         $payroll = Payroll::where('week_id', $this->weekId)->get();
-        if($payroll->count() >= 1){
-            foreach($payroll as $pay){
+        if (count($payroll) >= 1) {
+            foreach ($payroll as $pay) {
                 $temp = [];
                 $temp['week'] = $week;
                 $pay->update($temp);
             }
-        }else{
-            $payroll = Payroll::where('week_id', $this->weekId-1)->latest()->first();
-            if($payroll->week_id < $this->weekId){
-                $payroll = Payroll::where('week_id', $this->weekId-1)->get();
-                foreach($payroll as $pay){
+        } else {
+            if (Payroll::count() >= 1) {
+                $weekId = Carbon::now()->subWeek()->startOfWeek()->week();
+                $payroll = Payroll::where('week_id', $weekId)->get();
+                foreach ($payroll as $pay) {
                     $temp = [];
                     $temp['pay_id'] = Functions::payId();
                     $temp['name'] = $pay->name;
@@ -121,9 +133,8 @@ class AdminController extends Controller
                 }
             }
         }
-        $payroll = Payroll::where('week_id', $this->weekId)->paginate(8);
         return view('admin.pay', [
-            'payroll' => $payroll,
+            'payroll' => Payroll::where('week_id', $this->weekId)->paginate(8),
             'log' => $this->log,
         ]);
     }
@@ -162,9 +173,9 @@ class AdminController extends Controller
             $log['title'] = "EDIT PAYROLL";
             $log['log'] = "User " . $this->admin->userName . " edited " . $payroll->userName . " details. The columns edited are " . $sentence . ".";
             $request->user()->log()->create($log);
-                return redirect(route('a-payroll'))->with('update', 'Successfully Updated Payroll.');
+            return redirect(route('a-payroll'))->with('success', 'Successfully Updated Payroll.');
         } catch (\Exception $e) {
-            return redirect(route('a-payroll'))->with('error', $e->getMessage());
+            return redirect(route('a-payroll'))->with('danger', $e->getMessage());
         }
     }
 
@@ -177,6 +188,9 @@ class AdminController extends Controller
             $validated = $request->validate([
                 'role' => 'nullable|string|uppercase|max:255',
                 'userName' => 'nullable|string|uppercase|max:255',
+                'first' => 'nullable|string|uppercase|max:255',
+                'middle' => 'nullable|string|uppercase|max:255',
+                'last' => 'nullable|string|uppercase|max:255',
                 'status' => 'nullable|string|uppercase|max:255',
                 'email' => 'nullable|string|uppercase|max:255',
                 'phone' => 'nullable|string|uppercase|max:255',
@@ -192,7 +206,7 @@ class AdminController extends Controller
             $validated['eStatus'] = "ACTIVE";
             $validated['name'] = $name;
             $validated['created_by'] = $this->admin->name;
-            $request->user()->employees()->create($validated);
+            Employee::create($validated);
             $employee = Employee::latest()->first();
 
             //Get Image
@@ -242,6 +256,7 @@ class AdminController extends Controller
             $request->user()->payroll()->create($payroll);
 
             $user = [];
+            $user['employee_id'] = $employee->id;
             $user['name'] = $name;
             $user['userName'] = $userName;
             $user['userType'] = 'USER';
@@ -254,7 +269,7 @@ class AdminController extends Controller
             $request->user()->log()->create($log);
             return redirect('admin/employee')->with('success', 'Successfully added employee.');
         } catch (\Exception $e) {
-            return redirect('admin/employee')->with('error', $e->getMessage());
+            return redirect('admin/employee')->with('danger', $e->getMessage());
         }
     }
 
@@ -263,7 +278,6 @@ class AdminController extends Controller
         $employee = Employee::find($id);
         $payroll = Payroll::find($id);
         $image = Image::find($id);
-        Gate::authorize('update', $employee);
         return view('admin.editEmp', [
             'employee' => $employee,
             'payroll' => $payroll,
@@ -276,11 +290,14 @@ class AdminController extends Controller
     {
         try {
             $employee = Employee::find($id);
-            $payroll = Payroll::find($id);
-            Gate::authorize('update', $employee);
+            $payroll = Payroll::where('userName', $employee->userName)->first();
+            $user = User::where('userName', $employee->userName)->first();
             $validated = $request->validate([
                 'role' => 'nullable|string|uppercase|max:255',
                 'userName' => 'nullable|string|uppercase|max:255',
+                'first' => 'nullable|string|uppercase|max:255',
+                'middle' => 'nullable|string|uppercase|max:255',
+                'last' => 'nullable|string|uppercase|max:255',
                 'status' => 'nullable|string|uppercase|max:255',
                 'email' => 'nullable|string|uppercase|max:255',
                 'phone' => 'nullable|string|uppercase|max:255',
@@ -293,10 +310,24 @@ class AdminController extends Controller
                 'ePhone' => 'nullable|string|uppercase|max:255',
                 'eAdd' => 'nullable|string|uppercase|max:255',
             ]);
-            $validated['name'] = $request->last.', '.$request->first.' '.$request->middle;
+            if (isset($request->promote)) {
+                $validated['role'] = 'EMPLOYEE';
+            }
+            $validated['name'] = $request->last . ', ' . $request->first . ' ' . $request->middle;
             $validated['edited_by'] = $this->admin->name;
             $employee->update($validated);
             $payroll->update($validated);
+            $user->update($validated);
+            if ($request->hasFile('image')) {
+                $image = Image::where('employee_id', $employee->id)->first();
+                $userName = $request->userName;
+                $fileName = $userName . '-' . time() . '.' . $request->image->extension();
+                $imageData = file_get_contents($request->file('image')->getRealPath());
+                $temp = [];
+                $temp['image_name'] = $fileName;
+                $temp['image_data'] = $imageData;
+                $image->update($temp);
+            }
             $changes = $employee->getChanges();
             unset($changes['updated_at']);
             $columns = [];
@@ -308,25 +339,33 @@ class AdminController extends Controller
             $log['title'] = "EDIT EMPLOYEE";
             $log['log'] = "User " . $this->admin->userName . " edited " . $employee->userName . " details. The columns edited are " . $sentence . ".";
             $request->user()->log()->create($log);
-            return redirect(route('a-view'))->with('update', 'Successfully Updated Employee.');
+            return redirect(route('a-view'))->with('success', 'Successfully Updated Employee.');
         } catch (\Exception $e) {
-            return redirect(route('a-view'))->with('error', $e->getMessage());
+            dd($e);
+            return redirect(route('a-view'))->with('danger', $e->getMessage());
         }
     }
     public function destroy($id)
     {
         try {
             $employee = Employee::find($id);
-            Gate::authorize('delete', $employee);
             $employee->delete();
             $admin = User::find($this->admin->id);
             $log = [];
             $log['title'] = "DELETE EMPLOYEE";
             $log['log'] = "User " . $this->admin->userName . " deleted " . $employee->userName . ".";
             $admin->log()->create($log);
-            return redirect(route('a-view'))->with('delete', 'Successfully Deleted Employee.');;
+            return redirect(route('a-view'))->with('success', 'Successfully Deleted Employee.');;
         } catch (\Exception $e) {
-            return redirect(route('a-view'))->with('error', $e->getMessage());
+            return redirect(route('a-view'))->with('danger', $e->getMessage());
         }
+    }
+
+    public function payrollAll()
+    {
+        return view('admin.pay', [
+            'payroll' => Payroll::paginate(8),
+            'log' => $this->log,
+        ]);
     }
 }

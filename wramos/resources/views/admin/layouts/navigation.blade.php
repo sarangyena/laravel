@@ -103,7 +103,7 @@
 
             <li>
                 <button type="button" id="p1"
-                    class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group {{ Route::currentRouteName() == 'a-online' || Route::currentRouteName() == 'a-patients'  ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700' }}"
+                    class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group {{ Route::currentRouteName() == 'a-online' || Route::currentRouteName() == 'a-patients' ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700' }}"
                     aria-controls="patients" data-collapse-toggle="patients">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
@@ -136,7 +136,7 @@
 
             <li>
                 <button type="button" id="s1"
-                    class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                    class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group {{ Route::currentRouteName() == 'a-services' || Route::currentRouteName() == 'a-packages' || Route::currentRouteName() == 'a-addP' ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700' }}"
                     aria-controls="services" data-collapse-toggle="services">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
@@ -152,20 +152,23 @@
                 </button>
                 <ul id="services" class="hidden py-2 space-y-2">
                     <li>
-                        <a href="#"
-                            class="text-sm flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Manage
+                        <a href="{{ route('a-services') }}"
+                            class="text-sm flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group 
+                            {{ Route::currentRouteName() == 'a-services' ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700' }}">Manage
                             Services</a>
                     </li>
                     <li>
-                        <a href="#"
-                            class="text-sm flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Manage
+                        <a href="{{ route('a-packages') }}"
+                            class="text-sm flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group 
+                            {{ Route::currentRouteName() == 'a-packages' ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700' }}">Manage
                             Packages</a>
                     </li>
                 </ul>
             </li>
             <li>
-                <a href="#"
-                    class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <a href="{{route('a-appointments')}}"
+                    class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group 
+                    {{ Route::currentRouteName() == 'a-appointments' ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -175,8 +178,9 @@
                 </a>
             </li>
             <li>
-                <a href="#"
-                    class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <a href="{{ route('a-queries') }}"
+                    class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group 
+                    {{ Route::currentRouteName() == 'a-queries' ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white' : 'text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"

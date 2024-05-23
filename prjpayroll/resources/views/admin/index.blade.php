@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-7">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-4 text-gray-900 dark:text-gray-100">
@@ -21,7 +21,7 @@
                         </div>
                         <div class="bg-white rounded-lg shadow-lg dark:bg-gray-800">
                             <p class="text-xl text-center border-b-2 border-green-300 mx-5">CURRENT PERIOD</p>
-                            <p class="text-4xl text-center py-10">{{ $week }}th Period</p>
+                            <p class="text-4xl text-center py-10">{{ $week }} Period</p>
                         </div>
                     </div>
                     <p class="font-bold text-2xl border-b-2 border-green-300 mt-5">EMPLOYEES</p>

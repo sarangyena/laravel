@@ -2,34 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Reply;
 use App\Models\Contact;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        try{
+        try {
             $validated = $request->validate([
                 'name' => 'nullable|string|max:255',
                 'email' => 'nullable|string|max:255',
@@ -38,40 +22,49 @@ class ContactController extends Controller
             ]);
             $contact = Contact::create($validated);
             return redirect(route('index'))->with('success', 'Your message has been sent successfully!');
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return redirect(route('index'))->with('error', $e->getMessage());
         }
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Contact $contact)
+    public function reply(Request $request, $id)
     {
-        //
+        try {
+            $contact = Contact::find($id);
+            $data = [];
+            $data['name'] = $contact->name;
+            $data['email'] = $contact->email;
+            $data['phone'] = $contact->phone;
+            $data['date'] = $contact->created_at->toDateTimeString();
+            $data['remarks'] = $request->input('reply');
+            $data['message'] = $contact->message;
+            $data['isRead'] = true;
+            $contact->update($data);
+            Mail::to('edrianflorendo18@gmail.com')->send(new Reply($data));
+            return redirect()->back()->with('success', 'Successfully replied.');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Contact $contact)
+    public function updateRead($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Contact $contact)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Contact $contact)
-    {
-        //
+        try {
+            $contact = Contact::find($id);
+            $temp = [];
+            if ($contact->isRead == true) {
+                if ($contact->remarks != 'None') {
+                    return redirect()->back()->with('error', 'Cannot unread. Already has a reply.');
+                } else {
+                    $temp['isRead'] = false;
+                    $contact->update($temp);
+                    return redirect()->back()->with('success', 'Successfully unread the message.');
+                }
+            } else {
+                $temp['isRead'] = true;
+                $contact->update($temp);
+                return redirect()->back()->with('success', 'Successfully read the message.');
+            }
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 }

@@ -1,6 +1,6 @@
 <x-admin-layout>
-    <div class="p-4 sm:ml-64">
-        <div class="p-4 rounded-lg dark:border-gray-700 mt-14">
+    <div class="sm:ml-64 h-screen flex flex-col justify-between">
+        <div class="p-4 mx-4 rounded-lg dark:border-gray-700 mt-20">
             <h1 class="text-2xl font-bold border-b-2 border-red-500 pb-1">ADMIN | VIEW USERS</h1>
             <div class="pb-4 mt-3">
                 <label for="table-search" class="sr-only">Search</label>
@@ -12,7 +12,7 @@
                                 d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                         </svg>
                     </div>
-                    <input type="text" id="table-search"
+                    <input type="text" id="search"
                         class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Search User">
                 </div>
@@ -41,7 +41,7 @@
                 </div>
             @else
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" id="view">
                         <thead
                             class="text-center text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
@@ -120,6 +120,25 @@
                 </div>
             @endif
         </div>
+        <footer class="bg-white dark:bg-gray-800">
+            <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+                <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2024 <strong>W.RAMOS</strong>.
+                    Developed by IS Student from TUP Manila.
+                </span>
+            </div>
+        </footer>
     </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function(){
+            $('#search').on('input', function() {
+                var inputValue = $(this).val();
+                $('#view tbody tr').filter(function() {
+                    $(this).toggle($(this).text().indexOf(inputValue) > -1);
+                });
+            });
 
+            
+        })
+    </script>
 </x-admin-layout>

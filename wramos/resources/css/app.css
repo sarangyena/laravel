@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #ef4444 white;
+    }
+/* Works on Chrome, Edge, and Safari */
+    *::-webkit-scrollbar {
+    width: 12px;
+    }
+    
+    *::-webkit-scrollbar-track {
+        background: white;
+    }
+    
+    *::-webkit-scrollbar-thumb {
+        background-color: #ef4444;
+        border-radius: 20px;
+        border: 3px solid white;
+    }
