@@ -4,13 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use App\Models\Payroll;
-use App\Models\QRLogin;
-use Illuminate\Http\Request;
 //Print
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
-use NumberFormatter;
-use Rmunate\Utilities\SpellNumber;
+
 
 class PrintController extends Controller
 {

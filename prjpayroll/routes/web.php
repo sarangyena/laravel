@@ -6,11 +6,8 @@ use App\Http\Controllers\Functions;
 use App\Http\Controllers\PrintController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QR;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use Spatie\LaravelPdf\Facades\Pdf;
 
-//Admin and User Dashboard
 
 //If authenticated, go to dashboard
 Route::get('/', function (  ) {
